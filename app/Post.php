@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbone\Carbone;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -10,17 +11,37 @@ class Post extends Model {
 	
 	use Sluggable;
 
-	const IS_PUBLIC = 1;
-	const IS_DRAFT 	= 0;
+	// `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	// `title` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	// `slug` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	// `content` TEXT NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	// `category_id` INT(11) NULL DEFAULT NULL,
+	// `user_id` INT(11) NULL DEFAULT NULL,
+	// `status` INT(11) NOT NULL DEFAULT '0',
+	// `views` INT(11) NOT NULL DEFAULT '0',
+	// `is_featured` INT(11) NOT NULL DEFAULT '0',
 
-	protected $fillab;e = [ 'title', 'content' ];
+	const IS_PUBLIC	= 1;
+	const IS_DRAFT	= 0;
+
+	//protected $fillable = ["title", 'content', 'date', 'category_id', 'status', 'is_featured'];
+	protected $fillable = ["title", 'content', 'date'];
 
 	public function category() {
-		return $this->hasOne(Category::class);
+		return $this->belongsTo(Category::class);
+	}
+
+	public function getCategoryTitle() {
+		return ( $this->category != null ) ? $this->category->title : "Нет категории";
+	}
+
+	public function getTagsTitles() {
+
+		return ( !$this->tags->isEmpty() ) ? implode(', ', $this->tags->pluck('title')->all()) : "Нет тегов";
 	}
 
 	public function author() {
-		return $this->hasOne(User::class);
+		return $this->belongsTo(User::class, 'user_id');
 	}
 
 	public function tags() {
@@ -28,40 +49,46 @@ class Post extends Model {
 			Tag::class,
 			'post_tags',
 			'post_id',
-			'tag_id',
+			'tag_id'
 		);
 	}
 
    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
+	{
+		return [
+			'slug' => [
+				'source' => 'title'
+			]
+		];
+	}
 
-    public static function add( $fields ) {
-    	$post = new static;
-    	$post->fill( $fields );
-    	$post->user_id = 1;
-    	$post->save();
+	public static function add( $fields ) {
+		$post = new static;
+		$post->fill( $fields );
+		$post->user_id = 1;
+		$post->save();
 
-    	return $post;
-    }
+		return $post;
+	}
 
-    public function edit( $fields ) {
-    	$this->fill( $fields );
-    	$this->save();
-    }
+	public function edit( $fields ) {
+		$this->fill( $fields );
+		$this->save();
+	}
 
 	public function remove() {
 		
 		// delete post image
-		Storage::delete( 'uploads/' . $this->image );
+		$this->removeImage();
 		
 		// delete post
 		$this->delete();
+	}
+
+	public function removeImage() {
+		if ( $this->image != null ) {
+			Storage::delete( 'uploads/' . $this->image );
+		}
 	}
 
 	public function uploadImage( $image ) {
@@ -69,10 +96,10 @@ class Post extends Model {
 		if ( $image == null ) return;
 
 		// delete post image
-		Storage::delete( 'uploads/' . $this->image );
+		$this->removeImage( $image );
 
 		$filename = str_random(10) . '.' . $image->extension();
-		$image->saveAs( 'uploads', $filename );
+		$image->storeAs( 'uploads', $filename );
 		$this->image = $filename;
 		$this->save();
 	}
@@ -131,4 +158,9 @@ class Post extends Model {
 		} 
 		return $this->setFeatured();
 	}
+
+	// public function setDateAttribute( $value ) {
+	// 	$date = Carbone::createFromFormat('', $date)->format('yyyy-mm-dd');
+	// 	$this->attributes['date'] = $date;
+	// }
 }

@@ -89,7 +89,6 @@ class User extends Authenticatable {
     }
     
 
-
     public function makeAdmin() {
         $this->is_admin = 1;
         $this->save();

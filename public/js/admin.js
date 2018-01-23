@@ -3075,7 +3075,7 @@ $(document).ready(function (){
     //Date picker
     $('#datepicker').datepicker({
       autoclose: true,
-      format: 'dd/mm/yy'
+      format: 'yyyy-mm-dd'
     });
     //iCheck for checkbox and radio inputs
     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
