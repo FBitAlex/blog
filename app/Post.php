@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Carbone\Carbone;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -24,8 +24,7 @@ class Post extends Model {
 	const IS_PUBLIC	= 1;
 	const IS_DRAFT	= 0;
 
-	//protected $fillable = ["title", 'content', 'date', 'category_id', 'status', 'is_featured'];
-	protected $fillable = ["title", 'content', 'date'];
+	protected $fillable = ["title", 'content', 'date', 'description'];
 
 	public function category() {
 		return $this->belongsTo(Category::class);
@@ -159,8 +158,12 @@ class Post extends Model {
 		return $this->setFeatured();
 	}
 
-	// public function setDateAttribute( $value ) {
-	// 	$date = Carbone::createFromFormat('', $date)->format('yyyy-mm-dd');
-	// 	$this->attributes['date'] = $date;
-	// }
+	public function getcategoryId() {
+		return ( $this->category != null ) ? $this->category_id : null;
+	}
+
+	public function getDate() {
+	 	return Carbon::createFromFormat('Y-m-d', $this->date)->format('F d, Y');
+	}
+
 }
