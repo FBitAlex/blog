@@ -6,31 +6,30 @@
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-					@foreach($posts as @post)
+					@foreach($posts as $post)
 					<div class="col-md-6">
 						<article class="post post-grid">
 							<div class="post-thumb">
-								<a href="blog.html"><img src="assets/images/blog-grid.jpg" alt=""></a>
+								<a href="{{route('post.show', $post->slug)}}"><img src="{{$post->getImage()}}" alt=""></a>
 
-								<a href="#" class="post-thumb-overlay text-center">
+								<a href="{{route('post.show', $post->slug)}}" class="post-thumb-overlay text-center">
 									<div class="text-uppercase text-center">View Post</div>
 								</a>
 							</div>
 							<div class="post-content">
 
 								<header class="entry-header text-center text-uppercase">
-									<h6><a href="#"> Travel</a></h6>
-									<h1 class="entry-title"><a href="blog.html">Home is peaceful place</a></h1>
+		                            @if($post->hasCategory())
+		                                <h6><a href="{{route('category.show', $post->category->slug)}}">{{$post->getCategoryTitle()}}</a></h6>
+		                            @endif
+
+									<h1 class="entry-title"><a href="{{route('post.show', $post->slug)}}">{{$post->title}}</a></h1>
 								</header>
 
 								<div class="entry-content">
-									<p>Lorem ipsum dolor sit amet, consadipsing elitr, sed diam nonumy eirmod tevidubore
-										et dolore magna aliquyam erat, sevolutua. At vero eos et accusam et justo duo
-										dlores rebum. Stet clita kasd gubergren
-									</p>
-
+									{!! $post->description !!}
 									<div class="social-share">
-										<span class="social-share-title pull-left text-capitalize">By Rubel On February 12, 2016</span>
+										<span class="social-share-title pull-left text-capitalize">By {{$post->author->name}} On {{$post->getDate()}}</span>
 									</div>
 								</div>
 
@@ -40,13 +39,7 @@
 					</div>
 					@endforeach
 				</div>
-				<ul class="pagination">
-					<li class="active"><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-				</ul>
+				{{$posts->links()}}
 			</div>
 			<div class="col-md-4" data-sticky_column>
 				<div class="primary-sidebar">
@@ -66,7 +59,7 @@
 						<div class="popular-post">
 
 
-							<a href="#" class="popular-img"><img src="assets/images/p1.jpg" alt="">
+							<a href="#" class="popular-img"><img src="/images/p1.jpg" alt="">
 
 								<div class="p-overlay"></div>
 							</a>
@@ -79,7 +72,7 @@
 						</div>
 						<div class="popular-post">
 
-							<a href="#" class="popular-img"><img src="assets/images/p1.jpg" alt="">
+							<a href="#" class="popular-img"><img src="/images/p1.jpg" alt="">
 
 								<div class="p-overlay"></div>
 							</a>
@@ -92,7 +85,7 @@
 						<div class="popular-post">
 
 
-							<a href="#" class="popular-img"><img src="assets/images/p1.jpg" alt="">
+							<a href="#" class="popular-img"><img src="/images/p1.jpg" alt="">
 
 								<div class="p-overlay"></div>
 							</a>
@@ -109,7 +102,7 @@
 						<div id="widget-feature" class="owl-carousel">
 							<div class="item">
 								<div class="feature-content">
-									<img src="assets/images/p1.jpg" alt="">
+									<img src="/images/p1.jpg" alt="">
 
 									<a href="#" class="overlay-text text-center">
 										<h5 class="text-uppercase">Home is peaceful</h5>
@@ -120,7 +113,7 @@
 							</div>
 							<div class="item">
 								<div class="feature-content">
-									<img src="assets/images/p2.jpg" alt="">
+									<img src="/images/p2.jpg" alt="">
 
 									<a href="#" class="overlay-text text-center">
 										<h5 class="text-uppercase">Home is peaceful</h5>
@@ -131,7 +124,7 @@
 							</div>
 							<div class="item">
 								<div class="feature-content">
-									<img src="assets/images/p3.jpg" alt="">
+									<img src="/images/p3.jpg" alt="">
 
 									<a href="#" class="overlay-text text-center">
 										<h5 class="text-uppercase">Home is peaceful</h5>
@@ -150,7 +143,7 @@
 
 							<div class="media">
 								<div class="media-left">
-									<a href="#" class="popular-img"><img src="assets/images/r-p.jpg" alt="">
+									<a href="#" class="popular-img"><img src="/images/r-p.jpg" alt="">
 
 										<div class="p-overlay"></div>
 									</a>
@@ -166,7 +159,7 @@
 
 							<div class="media">
 								<div class="media-left">
-									<a href="#" class="popular-img"><img src="assets/images/r-p.jpg" alt="">
+									<a href="#" class="popular-img"><img src="/images/r-p.jpg" alt="">
 
 										<div class="p-overlay"></div>
 									</a>
@@ -182,7 +175,7 @@
 
 							<div class="media">
 								<div class="media-left">
-									<a href="#" class="popular-img"><img src="assets/images/r-p.jpg" alt="">
+									<a href="#" class="popular-img"><img src="/images/r-p.jpg" alt="">
 
 										<div class="p-overlay"></div>
 									</a>
@@ -198,7 +191,7 @@
 
 							<div class="media">
 								<div class="media-left">
-									<a href="#" class="popular-img"><img src="assets/images/r-p.jpg" alt="">
+									<a href="#" class="popular-img"><img src="/images/r-p.jpg" alt="">
 
 										<div class="p-overlay"></div>
 									</a>

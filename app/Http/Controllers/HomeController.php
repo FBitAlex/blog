@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\User;
+use App\Tag;
+use App\Category;
+
 use Illuminate\Http\Request;
 
 class HomeController extends Controller {
@@ -21,10 +24,21 @@ class HomeController extends Controller {
 		return view('pages.show', [
 			'post' 	=> $post,
 		]);
-		// return view('pages.show', compact('post'));
 	}
-	// public function getAuthor() {
 
-	// 	return $this->author();
-	// }
+	public function tag( $slug ) {
+		$tag = Tag::where(['slug' => 	$slug])->firstOrFail();
+		$posts = $tag->posts()->paginate(2);
+		return view('pages.list', [
+			'posts'	=> $posts
+		]);
+	}
+
+	public function category( $slug ) {
+		$category = Category::where(['slug' => 	$slug])->firstOrFail();
+		$posts = $category->posts()->paginate(2);
+		return view('pages.list', [
+			'posts'	=> $posts
+		]);
+	}
 }
