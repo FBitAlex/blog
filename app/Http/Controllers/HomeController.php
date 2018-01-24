@@ -12,9 +12,9 @@ use Illuminate\Http\Request;
 class HomeController extends Controller {
 	
 	public function index() {
-		$posts = Post::paginate(2);
+		$posts 			= Post::paginate(2);
 		return view('pages.index', [
-			'posts' 	=> $posts,
+			'posts' 		=> $posts
 		]);
 	}
 
